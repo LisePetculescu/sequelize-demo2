@@ -5,9 +5,9 @@ const app = express();
 const PORT = 3000;
 
 // Create a Sequelize instance
-const sequelize = new Sequelize("database2", "root", "123456", {
+const sequelize = new Sequelize("seqTest", "root", "#Kommefryser2", {
   host: "localhost",
-  dialect: "mysql",
+  dialect: "mysql"
 });
 
 // Define models for orders, order_items, and products
@@ -15,26 +15,26 @@ const Order = sequelize.define("Order", {
   orderNumber: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
-  },
+    unique: true
+  }
 });
 
 const Product = sequelize.define("Product", {
   productName: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   price: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-  },
+    allowNull: false
+  }
 });
 
 const OrderItem = sequelize.define("OrderItem", {
   quantity: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+    allowNull: false
+  }
 });
 
 // Define associations between the models
@@ -59,31 +59,31 @@ async function createSampleData() {
   try {
     // Create a sample order
     const order = await Order.create({
-      orderNumber: "ORD123",
+      orderNumber: "ORD123"
     });
 
     // Create sample products
     const product1 = await Product.create({
       productName: "Product A",
-      price: 19.99,
+      price: 19.99
     });
 
     const product2 = await Product.create({
       productName: "Product B",
-      price: 29.99,
+      price: 29.99
     });
 
     // Associate products with order through order items
     await OrderItem.create({
       quantity: 2,
       OrderId: order.id,
-      ProductId: product1.id,
+      ProductId: product1.id
     });
 
     await OrderItem.create({
       quantity: 1,
       OrderId: order.id,
-      ProductId: product2.id,
+      ProductId: product2.id
     });
 
     console.log("Sample data created");
@@ -107,9 +107,9 @@ app.get("/orders", async (req, res) => {
       include: [
         {
           model: OrderItem,
-          include: [Product],
-        },
-      ],
+          include: [Product]
+        }
+      ]
     });
 
     res.json(orders);
